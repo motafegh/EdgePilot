@@ -4,11 +4,11 @@
 
 ## Where we are
 
-EdgePilot has been created and is in **Phase 0 — Bootstrap and governance**.
+EdgePilot has completed its bootstrap/governance baseline and has advanced into **Phase A — Trading mechanics and problem selection**.
 
-The project direction is established, but no strategy, exchange, market universe, data source, backtesting framework, implementation stack, or live-trading mechanism has been selected yet.
+The core first-problem selection is now established. Phase A is **substantially complete but not closed** because exchange/jurisdiction constraints and final numerical live-risk limits remain intentionally unresolved.
 
-## Accepted direction
+## Accepted project direction
 
 - EdgePilot is an evidence-driven crypto trading research and execution project.
 - The eventual starting capital under discussion is approximately $100–$200.
@@ -20,52 +20,138 @@ The project direction is established, but no strategy, exchange, market universe
 - An LLM may later assist research, interpretation, review, or operation, but it is not assumed to be the primary price-direction oracle.
 - A strategy must earn deployment; complexity must earn inclusion; capital increases must earn scaling.
 
-## Foundational artifacts
+## Accepted Phase A decisions
+
+### First trading problem shape
+
+ADR-0002 selects:
+
+> **Low-turnover spot swing trading on highly liquid crypto markets, with trend following as the primary first strategy family to investigate and mean reversion retained as the first major comparator.**
+
+Not selected as initial targets:
+
+- scalping,
+- high-turnover intraday trading,
+- cross-venue arbitrage,
+- market making.
+
+This is a research-direction decision, not evidence that trend following is profitable.
+
+### Initial research universe
+
+ADR-0003 selects:
+
+- **BTC**
+- **ETH**
+
+The exact quote currency/pair remains dependent on venue/funding constraints.
+
+### Initial timeframe
+
+- **4H** is the primary candidate decision timeframe for the first strategy research.
+- **1D** may be retained for explicit broader-regime/context or robustness work.
+- Minute/second-scale decision-making is out of the first target.
+
+## Phase A mechanics learned/recorded
+
+`docs/learning/PHASE_A_MARKET_MECHANICS_PRIMER.md` now establishes the working concepts needed before backtesting:
+
+- base/quote and spot semantics,
+- bid/ask/spread,
+- market, limit and stop-style orders,
+- maker/taker,
+- slippage and liquidity,
+- OHLCV semantics and intrabar ambiguity,
+- timeframe meaning,
+- return and volatility,
+- risk per trade and position sizing,
+- reward/risk and expectancy,
+- drawdown,
+- cost-adjusted trade accounting,
+- key backtest failure modes.
+
+## Exchange/data position
+
+The project has defined mandatory exchange/data requirements in:
+
+`docs/research/2026-10-10_PHASE_A_EXCHANGE_AND_DATA_REQUIREMENTS.md`
+
+A provider must satisfy legal/account availability, liquid BTC/ETH spot markets, machine-readable trading rules, historical/live data, trading APIs, least-privilege credentials, cost observability and small-account compatibility.
+
+No exchange is selected yet because legal/operational availability depends on the user's actual jurisdiction/account-access situation and must not be inferred.
+
+The preferred architecture is provider-neutral core records behind exchange/data adapters.
+
+## Current artifacts
+
+### Governance / project
 
 - `README.md`
 - `AGENTS.md`
+- `SECURITY.md`
 - `docs/PROJECT_CHARTER.md`
 - `docs/RISK_POLICY.md`
 - `docs/ARCHITECTURE.md`
 - `docs/ROADMAP.md`
+
+### Decisions
+
 - `docs/decisions/ADR-0001-evidence-first-staged-deployment.md`
+- `docs/decisions/ADR-0002-first-trading-problem-shape.md`
+- `docs/decisions/ADR-0003-initial-research-universe-and-timeframe.md`
+
+### Phase A research / learning
+
+- `docs/research/2026-10-10_PHASE_A_TRADING_STYLE_SELECTION.md`
+- `docs/research/2026-10-10_PHASE_A_EXCHANGE_AND_DATA_REQUIREMENTS.md`
+- `docs/learning/PHASE_A_MARKET_MECHANICS_PRIMER.md`
+
+### Experiment support
+
+- `docs/experiments/EXPERIMENT_TEMPLATE.md`
 
 ## Explicitly unresolved
 
-These decisions should not be guessed or silently chosen:
+The following should not be silently guessed:
 
-1. first trading style/time horizon,
-2. first market and asset universe,
-3. target exchange and legal/operational constraints,
-4. historical and live data sources,
-5. exact numerical risk limits,
-6. first strategy hypothesis,
-7. implementation/backtesting stack,
-8. persistence and experiment-record format,
-9. live-paper execution method,
-10. eventual exchange integration design,
-11. reporting/UI needs,
-12. tax/accounting record requirements relevant to actual operation.
+1. target exchange and actual legal/account availability,
+2. exact quote currency/pair for BTC and ETH,
+3. historical/live data source implementation,
+4. final numerical live-risk limits,
+5. exact first trend-following hypothesis and rules,
+6. implementation/backtesting stack,
+7. persistence and experiment-record format,
+8. live-paper execution method,
+9. eventual exchange integration design,
+10. reporting/UI needs,
+11. tax/accounting record requirements relevant to actual operation.
 
 ## Next coherent responsibility
 
-Begin **Phase A — Trading mechanics and problem selection**.
+Finish the remaining Phase A decisions, then enter Phase B.
 
-The immediate question is not "which indicator should we code?" It is:
+### Remaining Phase A
 
-> Which trading style is realistically compatible with our small starting capital, intended risk level, available attention, trading costs, and desire to build a measurable, learnable system?
+1. establish actual jurisdiction/account-access constraints for exchange selection,
+2. compare the viable venues against the recorded rubric,
+3. choose quote markets/data source,
+4. convert the proposed live risk limits into accepted numerical policy if the venue/minimum-order economics support them.
 
-The first comparison should cover at least:
+### Then Phase B
 
-- swing trading,
-- intraday trading,
-- scalping,
-- trend following,
-- mean reversion,
-- and, for contrast, approaches such as arbitrage/market making that may be structurally unsuitable at this account size.
+Design and implement the **research foundation**, not a production trading bot:
 
-The result should narrow the problem space and identify what market mechanics we need to learn next.
+- canonical market-data records,
+- provider adapter boundary,
+- historical acquisition and validation,
+- reproducible datasets/configuration,
+- realistic fee/cost model,
+- deterministic backtest engine or selected framework,
+- risk/performance metrics,
+- experiment persistence,
+- leakage/look-ahead safeguards,
+- and a deliberately simple control strategy proving the research pipeline end to end.
 
 ## Stop line
 
-Do not begin implementing a production trading strategy or connecting exchange trading credentials before the Phase A problem-selection work establishes why that implementation is the right first target.
+Do not implement a production strategy, connect live trading credentials, or claim an edge before the Phase B research system can reproduce and audit its evidence.
